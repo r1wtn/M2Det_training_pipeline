@@ -1,0 +1,17 @@
+bin/
+include/
+lib/
+lib64/
+lib64
+pyvenv.cfg
+.DS_Store
+.vscode/
+__pycache__/
+share/
+etc/
+data/
+YOLO/
+SHIFTED/
+*.zip
+pana_trial/
+vatic_annotation/
