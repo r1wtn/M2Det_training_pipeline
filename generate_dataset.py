@@ -46,6 +46,7 @@ def preprocessVoc(img_path, xml_path, offset):
     Returns:
     img : shifted image 
     """
+    print(img_path)
     img = np.asarray(Image.open(img_path).convert('RGB'))
 
     h, w, _ = img.shape
@@ -77,9 +78,12 @@ def preprocessVoc(img_path, xml_path, offset):
         xmax.text = str(np.round(int(x2_)))
         ymax.text = str(np.round(int(y2_)))
 
+        invalid = cond_x1+cond_y1+cond_x2+cond_y2
+
         # judge wheter object is in bad conditions
-        occluded = int(member.find('occluded').text)
-        invalid = cond_x1+cond_y1+cond_x2+cond_y2+occluded
+        if member.find('occluded') is not None:
+            occluded = int(member.find('occluded').text)
+            invalid = cond_x1+cond_y1+cond_x2+cond_y2+occluded
 
         if invalid:
             xmlRoot.remove(member)
@@ -128,9 +132,10 @@ ratio = args.ratio
 
 img_out = 'data/VOC' + data_name + '/JPEGImages'
 xml_out = 'data/VOC' + data_name + '/Annotations'
+print(img_out)
 dataset_out = 'data/VOC' + data_name + '/ImageSets/Main'
-images_path = sorted(glob.glob(args.input + '/VOC/JPEGImages/*.jpg'))
-xmls_path = sorted(glob.glob(args.input + '/VOC/Annotations/*.xml'))
+images_path = sorted(glob.glob(args.input + '/VOC' + data_name + '/JPEGImages/*.jpg'))
+xmls_path = sorted(glob.glob(args.input + '/VOC' + data_name + '/Annotations/*.xml'))
 
 
 if os.path.exists(img_out):

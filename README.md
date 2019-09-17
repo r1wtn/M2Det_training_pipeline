@@ -5,7 +5,7 @@ M2Detの実装は、 https://github.com/qijiezhao/M2Det をクローンしてビ
 ## 環境
 ローカルPC
 * Mac OS Mojave 10.14.16
-* python 3.6.8
+* python 3.6.8  
 学習用サーバ
 * CentOS
 * CUDA V10.1.243
@@ -124,3 +124,11 @@ M2Detの学習は鬼のように時間がかかるため、放置して帰宅す
 https://qiita.com/vmmhypervisor/items/18c99624a84df8b31008  
 https://qiita.com/shtnkgm/items/4f0e4dcbb9eb52fdf316  
 以上のサイトを参考に、train.pyにslackwebを導入します。save_weightsが終了したくらいのタイミングでメッセージ（例えば現在のエポック数）をPOSTするようにしておけば、Slackでプロセスの死活監視が可能になります。
+## ファインチューニング
+学習が終わったモデルに対して、別のデータを使って再学習を行うことができます。
+```
+CUDA_VISIBLE_DEVICES=2,3 screen python train.py -c=configs/m2det512_vgg.py --ngpu 2 -d VOC --resume_net weights/<model>.pth --resume_epoch 100
+```
+再学習を行う対象のモデル、およびどのエポックから再開するかを指定して実行します。  
+learning rate (lr) に関するエラーが出る場合は、現在のepoch数に対応するlrの定義がされていない可能性があります。  
+resume epochを小さくするか、設定ファイルのlrの定義を見直してください。
